@@ -23,8 +23,8 @@ showRandomQuote();
 
 addQuote[1].onclick = function(){
 // alert('yes')
-const text = newQuoteTextValue;
-const category = newQuoteCategoryValue;
+const text = document.getElementById('newQuoteText').value;
+const category = document.getElementById('newQuoteCategory').value;
 if(text && category){
     pushquote(text, category);
 }
@@ -38,5 +38,5 @@ function pushquote(text, category) {
 pushquote();
 
 newQuotButton.addEventListener('click', ()=>{
-   qotD.textContent = pushquote();
+   qotD.innerText = showRandomQuote();
 })
