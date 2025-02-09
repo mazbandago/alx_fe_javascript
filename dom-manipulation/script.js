@@ -2,8 +2,8 @@ const qotD = document.getElementById('quoteDisplay');
 
 const newQuotButton = document.getElementById('newQuote');
 
-const newQuoteTextValue = document.getElementById('newQuoteText').value;
-const newQuoteCategoryValue = document.getElementById('newQuoteCategory').value;
+const newQuoteText = document.getElementById('newQuoteText');
+const newQuoteCategory = document.getElementById('newQuoteCategory');
 const addQuote = document.getElementsByTagName('button');
 
 
@@ -24,21 +24,38 @@ function showRandomQuote() {
 }
 showRandomQuote();
 
-addQuote[1].onclick = function(){
-// alert('yes')
-const text = document.getElementById('newQuoteText').value;
-const category = document.getElementById('newQuoteCategory').value;
-if(text && category){
-    pushquote(text, category);
-}
+const arrayQuote = [];
+const newpPost = {};
 
+newQuoteText.addEventListener('keypress', (e) =>{
+    const value = e.target.value;
+    newpPost['textBody'] = value;
+    console.log(value);
+})
+
+newQuoteCategory.addEventListener('keypress', (e) =>{
+    const value = e.target.value;
+    newpPost['textCategory'] = value;
+    console.log(value);
+
+})
+
+addQuote[1].onclick = function(){
+arrayQuote.push(newpPost);
+
+// const text = document.getElementById('newQuoteText').value;
+// const category = document.getElementById('newQuoteCategory').value;
+// if(text && category){
+//     pushquote(text, category);
+// }
 };
 // Function to add a new quote to the array
-function pushquote(text, category) {
-    myQuotes.push({ text, category });
-    console.log(`New quote added: "${text}" - Category: ${category}`);
+function createAddQuoteForm(value) {
+    const para = document.createElement('p')
+    para.innerText = newpPost;
+    console.log(`New quote added: "${para.innerText}" - Category: ${para.innerText}`);
 }
-pushquote();
+createAddQuoteForm();
 
 newQuotButton.addEventListener('click', ()=>{
    qotD.innerText = showRandomQuote();
