@@ -24,39 +24,44 @@ function showRandomQuote() {
 }
 showRandomQuote();
 
+
+
+// Function to add a new quote to the array
+function createAddQuoteForm(value) {
+    const para = document.createElement('p')
+    para.innerText = 'say: This is a new post!!';
+    qotD.appendChild(para);
+    // console.log(`New quote added: "${para.innerText}" - Category: ${para.innerText}`);
+}
+createAddQuoteForm();
+
+// newQuotButton.addEventListener('click', ()=>{
+//    qotD.innerText = showRandomQuote();
+// })
+const catchPost = JSON.parse(localStorage.getItem('arrayQuote'));
 const arrayQuote = [];
-const newPost = {};
+let newPost = {};
+
+
+
 
 newQuoteText.addEventListener('keypress', (e) =>{
-    const value = e.target.value;
+    e.target;
+    const value = document.getElementById('newQuoteText').value;
     newPost['textBody'] = value;
     
 })
 
 newQuoteCategory.addEventListener('keypress', (e) =>{
-    const value = e.target.value;
+    e.target;
+    const value = document.getElementById('newQuoteCategory').value;
     newPost['textCategory'] = value;
     
 })
 
 addQuote[1].onclick = function(){
+newPost['dateId'] = Math.floor(Date.now()/1000);  
 arrayQuote.push(newPost);
-
-// const text = document.getElementById('newQuoteText').value;
-// const category = document.getElementById('newQuoteCategory').value;
-// if(text && category){
-//     pushquote(text, category);
-// }
+localStorage.setItem('arrayQuote,', JSON.stringify(arrayQuote));
+newPost = {}
 };
-// Function to add a new quote to the array
-function createAddQuoteForm(value) {
-    const para = document.createElement('p')
-    para.innerText = newPost;
-    qotD.appendChild(para);
-    console.log(`New quote added: "${para.innerText}" - Category: ${para.innerText}`);
-}
-createAddQuoteForm();
-
-newQuotButton.addEventListener('click', ()=>{
-   qotD.innerText = showRandomQuote();
-})
