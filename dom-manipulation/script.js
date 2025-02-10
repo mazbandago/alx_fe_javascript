@@ -25,23 +25,22 @@ function showRandomQuote() {
 showRandomQuote();
 
 const arrayQuote = [];
-const newpPost = {};
+const newPost = {};
 
 newQuoteText.addEventListener('keypress', (e) =>{
     const value = e.target.value;
-    newpPost['textBody'] = value;
-    console.log(value);
+    newPost['textBody'] = value;
+    
 })
 
 newQuoteCategory.addEventListener('keypress', (e) =>{
     const value = e.target.value;
-    newpPost['textCategory'] = value;
-    console.log(value);
-
+    newPost['textCategory'] = value;
+    
 })
 
 addQuote[1].onclick = function(){
-arrayQuote.push(newpPost);
+arrayQuote.push(newPost);
 
 // const text = document.getElementById('newQuoteText').value;
 // const category = document.getElementById('newQuoteCategory').value;
@@ -52,7 +51,8 @@ arrayQuote.push(newpPost);
 // Function to add a new quote to the array
 function createAddQuoteForm(value) {
     const para = document.createElement('p')
-    para.innerText = newpPost;
+    para.innerText = newPost;
+    qotD.appendChild(para);
     console.log(`New quote added: "${para.innerText}" - Category: ${para.innerText}`);
 }
 createAddQuoteForm();
