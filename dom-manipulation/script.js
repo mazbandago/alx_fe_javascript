@@ -35,15 +35,12 @@ function createAddQuoteForm(value) {
 }
 createAddQuoteForm();
 
-// newQuotButton.addEventListener('click', ()=>{
-//    qotD.innerText = showRandomQuote();
-// })
+newQuotButton.addEventListener('click', ()=>{
+   qotD.innerText = showRandomQuote();
+})
 const catchPost = JSON.parse(localStorage.getItem('arrayQuote'));
 const arrayQuote = [];
 let newPost = {};
-
-
-
 
 newQuoteText.addEventListener('keypress', (e) =>{
     e.target;
@@ -65,3 +62,21 @@ arrayQuote.push(newPost);
 localStorage.setItem('arrayQuote,', JSON.stringify(arrayQuote));
 newPost = {}
 };
+
+// Function to export quotes to a JSON file
+function exportQuotesToJson() {
+    const dataStr = JSON.stringify(arrayQuote, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "quotes.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// Add event listener for the export button
+document.getElementById('exportQuotes').addEventListener('click', exportQuotesToJson);
