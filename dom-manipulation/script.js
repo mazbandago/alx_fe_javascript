@@ -241,5 +241,36 @@ function notifyUser(message) {
 setInterval(syncWithServer, 60000); // Sync every 60 seconds
 
 
+// POSTING QUOTE DATA TO A MOCK API
+async function postQuoteToServer(quote) {
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(quote)
+    });
+
+    const result = await response.json();
+    console.log('Quote posted successfully:', result);
+    notifyUser('Quote synced to server.');
+  } catch (error) {
+    console.error('Error posting quote:', error);
+    notifyUser('Failed to sync quote.');
+  }
+}
+
+// SAMPLE QUOTE OBJECT
+
+const newQuote = {
+  text: "Innovation distinguishes between a leader and a follower.",
+  category: "inspiration",
+  dateId: Math.floor(Date.now() / 1000)
+};
+
+postQuoteToServer(newQuote);
+
+
 
 
