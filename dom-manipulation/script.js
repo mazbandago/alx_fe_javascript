@@ -125,14 +125,20 @@ function populateCategories() {
 
 // FILTER QUOTES
 
-document.getElementById('categoryFilter').addEventListener('change', filterQuotes);
-
 function filterQuotes() {
-  const selected = document.getElementById('categoryFilter').value;
-  localStorage.setItem('lastFilter', selected);
-  const filtered = selected === 'all' ? arrayQuote : arrayQuote.filter(q => q.category === selected);
-  displayQuotes(filtered);
+  const selectedCategory = document.getElementById('categoryFilter').value;
+  localStorage.setItem('lastFilter', selectedCategory);
+
+  let filteredQuotes;
+  if (selectedCategory === 'all') {
+    filteredQuotes = arrayQuote;
+  } else {
+    filteredQuotes = arrayQuote.filter(q => q.category === selectedCategory);
+  }
+
+  displayQuotes(filteredQuotes);
 }
+
 
 function displayQuotes(quotes = arrayQuote) {
   const container = document.getElementById('quoteDisplay');
@@ -148,12 +154,28 @@ function displayQuotes(quotes = arrayQuote) {
 
 document.addEventListener('DOMContentLoaded', () => {
   loadQuotes();
-  const lastFilter = localStorage.getItem('lastFilter');
-  if (lastFilter) {
-    document.getElementById('categoryFilter').value = lastFilter;
-    filterQuotes();
-  }
+  const savedCategory = localStorage.getItem('lastFilter') || 'all';
+  document.getElementById('categoryFilter').value = savedCategory;
+  filterQuotes(); // This will use selectedCategory internally
 });
+
+// update categories when adding new quote
+
+function addQuote() {
+  const text = document.getElementById('newQuoteText').value.trim();
+  const category = document.getElementById('newQuoteCategory').value.trim();
+  if (!text || !category) return;
+
+  const newQuote = { text, category };
+  arrayQuote.push(newQuote);
+  saveQuotes();
+  populateCategories();
+
+  const selectedCategory = document.getElementById('categoryFilter').value;
+  if (selectedCategory === category || selectedCategory === 'all') {
+    filterQuotes(); // Refresh display with current filter
+  }
+}
 
 
 
