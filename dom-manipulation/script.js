@@ -271,6 +271,45 @@ const newQuote = {
 
 postQuoteToServer(newQuote);
 
+// FUNCTION WITH SERVER INTERACTION
+
+async function syncQuotes() {
+  try {
+    // Step 1: Fetch quotes from server
+    const fetchResponse = await fetch('https://jsonplaceholder.typicode.com/posts');
+    const serverQuotes = await fetchResponse.json();
+
+    const formattedServerQuotes = serverQuotes.map(post => ({
+      text: post.title,
+      category: 'server',
+      dateId: Math.floor(Date.now() / 1000)
+    }));
+
+    // Step 2: Resolve conflicts (server takes precedence)
+    const mergedQuotes = resolveConflicts(arrayQuote, formattedServerQuotes);
+    arrayQuote = mergedQuotes;
+    saveQuotes();
+    displayQuotes();
+    populateCategories();
+
+    // Step 3: Post local quotes to server
+    for (const quote of arrayQuote) {
+      await fetch('https://jsonplaceholder.typicode.com/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(quote)
+      });
+    }
+
+    notifyUser('Quotes synced with server successfully.');
+  } catch (error) {
+    console.error('Sync failed:', error);
+    notifyUser('Quote sync failed.');
+  }
+}
+
 
 
 
