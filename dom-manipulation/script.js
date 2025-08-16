@@ -309,6 +309,52 @@ async function syncQuotes() {
     notifyUser('Quote sync failed.');
   }
 }
+// NOTIFICATION UI FOR SYNC STATUS AND CONFLICTS
+
+function notifyUser(message, type = 'info') {
+  const notification = document.createElement('div');
+  notification.textContent = message;
+  notification.className = `notification ${type}`;
+  notification.style.cssText = `
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-weight: bold;
+    background-color: ${type === 'error' ? '#f8d7da' : '#d1ecf1'};
+    color: ${type === 'error' ? '#721c24' : '#0c5460'};
+  `;
+  document.body.prepend(notification);
+
+  setTimeout(() => notification.remove(), 4000);
+}
+
+// EXAMPLE USAGE IN SYNCQUOTES
+
+async function syncQuotes() {
+  try {
+    const serverQuotes = await fetchQuotesFromServer();
+    const mergedQuotes = resolveConflicts(arrayQuote, serverQuotes);
+    arrayQuote = mergedQuotes;
+    saveQuotes();
+    displayQuotes();
+    populateCategories();
+
+    for (const quote of arrayQuote) {
+      await fetch('https://jsonplaceholder.typicode.com/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(quote)
+      });
+    }
+
+    notifyUser('✅ Quotes synced with server!');
+  } catch (error) {
+    console.error('Sync failed:', error);
+    notifyUser('⚠️ Conflict detected or sync failed.', 'error');
+  }
+}
 
 
 
