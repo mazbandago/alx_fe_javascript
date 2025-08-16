@@ -98,3 +98,62 @@ function importFromJsonFile(event) {
     };
     fileReader.readAsText(event.target.files[0]);
 }
+// DYNAMIC FILTERING SYSTEM
+function populateCategories() {
+  const filter = document.getElementById('categoryFilter');
+  const categories = [...new Set(arrayQuote.map(q => q.category))];
+  filter.innerHTML = `<option value="all">All Categories</option>`;
+  categories.forEach(cat => {
+    const option = document.createElement('option');
+    option.value = cat;
+    option.textContent = cat;
+    filter.appendChild(option);
+  });
+}
+// POPULATE CATEGORIES
+function populateCategories() {
+  const filter = document.getElementById('categoryFilter');
+  const categories = [...new Set(arrayQuote.map(q => q.category))];
+  filter.innerHTML = `<option value="all">All Categories</option>`;
+  categories.forEach(cat => {
+    const option = document.createElement('option');
+    option.value = cat;
+    option.textContent = cat;
+    filter.appendChild(option);
+  });
+}
+
+// FILTER QUOTES
+
+document.getElementById('categoryFilter').addEventListener('change', filterQuotes);
+
+function filterQuotes() {
+  const selected = document.getElementById('categoryFilter').value;
+  localStorage.setItem('lastFilter', selected);
+  const filtered = selected === 'all' ? arrayQuote : arrayQuote.filter(q => q.category === selected);
+  displayQuotes(filtered);
+}
+
+function displayQuotes(quotes = arrayQuote) {
+  const container = document.getElementById('quoteDisplay');
+  container.innerHTML = '';
+  quotes.forEach(q => {
+    const div = document.createElement('div');
+    div.textContent = `"${q.text}" - ${q.category}`;
+    container.appendChild(div);
+  });
+}
+
+// RESTORE LAST FILTER
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadQuotes();
+  const lastFilter = localStorage.getItem('lastFilter');
+  if (lastFilter) {
+    document.getElementById('categoryFilter').value = lastFilter;
+    filterQuotes();
+  }
+});
+
+
+
