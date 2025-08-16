@@ -35,11 +35,18 @@ function createAddQuoteForm(value) {
 }
 createAddQuoteForm();
 
-newQuotButton.addEventListener('click', ()=>{
-   qotD.innerText = showRandomQuote();
-})
+newQuotButton.addEventListener('click', showRandomQuote)
+//    qotD.innerText = showRandomQuote();
+function showRandomQuote() {
+    const randomIndex = Math.floor(Math.random() * myQuotes.length);
+    const quote = myQuotes[randomIndex];
+    qotD.innerHTML = `<li>"${quote.text}" - Category: ${quote.category}</li>`;
+}
+
+
+
 const catchPost = JSON.parse(localStorage.getItem('arrayQuote'));
-const arrayQuote = [];
+const arrayQuote = catchPost || [];
 let newPost = {};
 
 newQuoteText.addEventListener('keypress', (e) =>{
@@ -59,7 +66,7 @@ newQuoteCategory.addEventListener('keypress', (e) =>{
 addQuote[1].onclick = function(){
 newPost['dateId'] = Math.floor(Date.now()/1000);  
 arrayQuote.push(newPost);
-localStorage.setItem('arrayQuote,', JSON.stringify(arrayQuote));
+localStorage.setItem('arrayQuote', JSON.stringify(arrayQuote));
 newPost = {}
 };
 
@@ -80,3 +87,14 @@ function exportQuotesToJson() {
 
 // Add event listener for the export button
 document.getElementById('exportQuotes').addEventListener('click', exportQuotesToJson);
+
+function importFromJsonFile(event) {
+    const fileReader = new FileReader();
+    fileReader.onload = function(event) {
+      const importedQuotes = JSON.parse(event.target.result);
+      arrayQuote.push(...importedQuotes);
+      saveQuotes();
+      alert('Quotes imported successfully!');
+    };
+    fileReader.readAsText(event.target.files[0]);
+}
